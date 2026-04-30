@@ -1,0 +1,44 @@
+company: adesso
+client_theme: databricks_governance_lakehouse_implementation
+
+catalog: adesso_dev
+
+schemas:
+  raw: raw
+  refined: refined
+  analytics: analytics
+
+volumes:
+  landing: landing
+  checkpoints: checkpoints
+
+paths:
+  sales_subpath: sales
+  inventory_subpath: inventory
+  reference_subpath: reference
+  schema_tracking_subpath: schema_tracking
+  checkpoints_subpath: autoloader_checkpoints
+
+tables:
+  bronze_sales: bronze_sales
+  silver_sales: silver_sales
+  gold_market_summary: gold_market_summary
+  gold_brand_summary: gold_brand_summary
+
+views:
+  vw_brand_sales_summary: vw_brand_sales_summary
+
+rules:
+  high_value_threshold: 10000
+  allowed_markets:
+    - ALL
+    - DE
+    - FR
+    - ES
+    - IT
+  allowed_brands:
+    - ALL
+    - NIVEA
+    - EUCERIN
+    - LABELLO
+    - HANSAPLAST
