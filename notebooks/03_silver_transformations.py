@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "2"
+# ///
 # MAGIC %md
 # MAGIC # 03 — Silver Transformations
 # MAGIC
@@ -9,17 +13,18 @@
 # MAGIC - write silver Delta table
 
 # COMMAND ----------
+
 import sys
 import yaml
 from pyspark.sql import functions as F
 
-sys.path.append("/Workspace/Repos/your-user/adesso-week8-day4-mini-project/src")
+sys.path.append("/Workspace/Repos/Mini Projects/adesso-databricks-lakehouse-project/src")
 
 from transformations.sales_cleaning import standardize_sales_columns, filter_invalid_sales_rows
 from transformations.business_rules import add_business_flags
 from udfs.market_udfs import classify_market_priority
 
-config_path = "/Workspace/Repos/your-user/adesso-week8-day4-mini-project/config/project_config.yml"
+config_path = "/Workspace/Repos/Mini Projects/adesso-databricks-lakehouse-project/config/project_config.yml"
 
 with open(config_path, "r") as f:
     config = yaml.safe_load(f)
@@ -36,6 +41,7 @@ print("Bronze table:", bronze_sales_table)
 print("Silver table:", silver_sales_table)
 
 # COMMAND ----------
+
 bronze_df = spark.table(bronze_sales_table)
 
 silver_df = (
@@ -49,6 +55,6 @@ silver_df = (
 print("Silver row count:", silver_df.count())
 
 # COMMAND ----------
+
 silver_df.write.mode("overwrite").format("delta").saveAsTable(silver_sales_table)
 display(spark.table(silver_sales_table))
-

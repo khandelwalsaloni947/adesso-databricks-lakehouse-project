@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "2"
+# ///
 # MAGIC %md
 # MAGIC # 04 — Gold Tables and Views
 # MAGIC
@@ -7,9 +11,10 @@
 # MAGIC - create at least one view
 
 # COMMAND ----------
+
 import yaml
 
-config_path = "/Workspace/Repos/your-user/adesso-week8-day4-mini-project/config/project_config.yml"
+config_path = "/Workspace/Repos/Mini Projects/adesso-databricks-lakehouse-project/config/project_config.yml"
 
 with open(config_path, "r") as f:
     config = yaml.safe_load(f)
@@ -24,6 +29,7 @@ gold_brand_summary = f"{catalog_name}.{analytics_schema}.{config['tables']['gold
 brand_view = f"{catalog_name}.{analytics_schema}.{config['views']['vw_brand_sales_summary']}"
 
 # COMMAND ----------
+
 spark.sql(f"""
 CREATE OR REPLACE TABLE {gold_market_summary} AS
 SELECT
@@ -63,4 +69,3 @@ print("Created view:", brand_view)
 
 display(spark.table(gold_market_summary))
 display(spark.table(gold_brand_summary))
-
