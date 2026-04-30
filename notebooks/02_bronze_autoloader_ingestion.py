@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "2"
+# ///
 # MAGIC %md
 # MAGIC # 02 — Bronze Auto Loader Ingestion
 # MAGIC
@@ -7,10 +11,11 @@
 # MAGIC - ingest sales files into a bronze Delta table using Auto Loader
 
 # COMMAND ----------
+
 import yaml
 from pyspark.sql import functions as F
 
-config_path = "/Workspace/Repos/your-user/adesso-week8-day4-mini-project/config/project_config.yml"
+config_path = "/Workspace/Repos/Mini Projects/adesso-databricks-lakehouse-project/config/project_config.yml"
 
 with open(config_path, "r") as f:
     config = yaml.safe_load(f)
@@ -35,7 +40,8 @@ print("Checkpoint path:", checkpoint_path)
 print("Bronze table:", bronze_sales_table)
 
 # COMMAND ----------
-repo_sample_path = "file:/Workspace/Repos/your-user/adesso-week8-day4-mini-project/sample_data"
+
+repo_sample_path = "file:/Workspace/Repos/Mini Projects/adesso-databricks-lakehouse-project/sample_data"
 dbutils.fs.mkdirs(landing_sales_path)
 
 for file_name in ["raw_sales_batch_1.csv", "raw_sales_batch_2.csv", "raw_sales_batch_3.csv", "raw_sales_batch_4.csv"]:
@@ -47,6 +53,7 @@ for file_name in ["raw_sales_batch_1.csv", "raw_sales_batch_2.csv", "raw_sales_b
 display(dbutils.fs.ls(landing_sales_path))
 
 # COMMAND ----------
+
 bronze_stream_df = (
     spark.readStream
     .format("cloudFiles")
@@ -58,6 +65,7 @@ bronze_stream_df = (
 )
 
 # COMMAND ----------
+
 query = (
     bronze_stream_df
     .withColumn("ingestion_ts", F.current_timestamp())
@@ -72,4 +80,3 @@ query = (
 query.awaitTermination()
 print("Bronze ingestion complete.")
 display(spark.table(bronze_sales_table))
-
