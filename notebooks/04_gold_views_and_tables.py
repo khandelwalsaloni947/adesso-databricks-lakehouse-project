@@ -68,4 +68,6 @@ print("Created gold table:", gold_brand_summary)
 print("Created view:", brand_view)
 
 display(spark.table(gold_market_summary))
+print("gold_brand_summary")
+
 display(spark.table(gold_brand_summary))

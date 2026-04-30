@@ -1,4 +1,8 @@
 # Databricks notebook source
+# /// script
+# [tool.databricks.environment]
+# environment_version = "2"
+# ///
 # MAGIC %md
 # MAGIC # 06 — Validation and Inspection
 # MAGIC
@@ -8,10 +12,11 @@
 # MAGIC - optionally set a task value
 
 # COMMAND ----------
+
 import yaml
 from pyspark.sql import functions as F
 
-config_path = "/Workspace/Repos/your-user/adesso-week8-day4-mini-project/config/project_config.yml"
+config_path = "/Workspace/Repos/Mini Projects/adesso-databricks-lakehouse-project/config/project_config.yml"
 
 with open(config_path, "r") as f:
     config = yaml.safe_load(f)
@@ -35,10 +40,10 @@ print("Rows with negative sales amount:", negative_sales)
 display(silver_df.groupBy("market").count().orderBy("market"))
 
 # COMMAND ----------
+
 try:
     dbutils.jobs.taskValues.set(key="silver_row_count", value=row_count)
     print("Task value set: silver_row_count =", row_count)
 except Exception as e:
     print("Task value not set. This is normal if the notebook is not running inside a Job.")
     print("Reason:", e)
-
